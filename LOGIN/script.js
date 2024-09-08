@@ -14,7 +14,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         // Store login state
         localStorage.setItem('loggedIn', 'true');
         // Redirect to the dashboard
-        window.location.href = 'LOGIN/Dashboard/Dashboard.html';
+        window.location.href = 'Dashboard/Dashboard.html';
     } else {
         // Show error message
         errorMessage.textContent = 'Invalid username or password. Please try again.';
