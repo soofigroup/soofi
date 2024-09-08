@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 1px solid #e1e4e8;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: calc(100% - 40px);
+            padding: 10px;
+            border: 1px solid #d1d1d1;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            display: inline-block;
+        }
+        .form-group button.search {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 40px;
+            background-color: transparent;
+            color: #007bff;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            transition: color 0.3s ease;
+        }
+        .form-group button.search:hover {
+            color: #0056b3;
+        }
+        .form-group input[type="file"] {
+            padding: 0;
+        }
+        .form-group button {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px 0;
+            transition: background-color 0.3s ease;
+            color: #fff;
+        }
+        .form-group button.save {
+            background-color: #28a745;
+        }
+        .form-group button.save:hover {
+            background-color: #218838;
+        }
+        .form-group button.delete {
+            background-color: #dc3545;
+        }
+        .form-group button.delete:hover {
+            background-color: #c82333;
+        }
+        .form-group button.clear {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .form-group button.clear:hover {
+            background-color: #e0a800;
+        }
+        .form-group button.close {
+            background-color: #6c757d;
+        }
+        .form-group button.close:hover {
+            background-color: #5a6268;
+        }
+        .form-group button.show-old-balance {
+            background-color: #17a2b8; /* Teal color */
+        }
+        .form-group button.show-old-balance:hover {
+            background-color: #138496; /* Darker teal */
+        }
+        .form-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Receipt Form</h1>
+        <form id="receiptForm">
+            <div class="form-group">
+                <label for="receiptNo">Receipt No</label>
+                <input type="text" id="receiptNo" name="receiptNo" placeholder="Receipt No" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter Name" required>
+                <button type="button" class="search" onclick="searchName()">🔍</button>
+            </div>
+            <div class="form-group">
+                <button type="button" class="show-old-balance" onclick="getPartyDetails()">Get Party Details</button>
+            </div>
+            <div class="form-group">
+                <label for="oldBalance">Old Balance</label>
+                <input type="text" id="oldBalance" name="oldBalance" placeholder="Old Balance" readonly>
+            </div>
+            <div class="form-group">
+                <button type="button" class="show-old-balance" onclick="showLedger()">Show Old Balance</button>
+            </div>
+            <div class="form-group">
+                <label for="receivedAmount">Received Amount</label>
+                <input type="text" id="receivedAmount" name="receivedAmount" placeholder="Received Amount" oninput="calculateBalance()">
+            </div>
+            <div class="form-group">
+                <label for="balance">Balance Amount</label>
+                <input type="text" id="balance" name="balance" placeholder="Balance Amount" readonly>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+                <label for="transactionMode">Mode of Transaction</label>
+                <select id="transactionMode" name="transactionMode" required>
+                    <option value="Cash">Cash</option>
+                    <option value="UPI">UPI</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="save" onclick="saveAndPrint()">Save & Print</button>
+                <button type="button" class="print" onclick="printReceipt()">Print</button>
+                <button type="button" class="delete" onclick="deleteReceipt()">Delete</button>
+                <button type="button" class="clear" onclick="clearForm()">Clear</button>
+                <button type="button" class="close" onclick="closeForm()">Close</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        const { jsPDF } = window.jspdf;
+
+        // Retrieve last receipt number from localStorage or initialize to 360
+        let receiptNumber = parseInt(localStorage.getItem('lastReceiptNumber')) || 360;
+
+        // Generate and set the receipt number on page load
+        window.onload = function() {
+            generateReceiptNumber();
+            setCurrentDate();
+        };
+
+        function generateReceiptNumber() {
+            // Set receipt number
+            document.getElementById('receiptNo').value = receiptNumber;
+            // Increment receipt number
+            receiptNumber++;
+            // Store updated receipt number in localStorage
+            localStorage.setItem('lastReceiptNumber', receiptNumber);
+        }
+
+        function setCurrentDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        }
+
+        function searchName() {
+            const name = document.getElementById('name').value;
+            // Example search functionality
+            alert("Search functionality for name needs implementation");
+        }
+
+        function getPartyDetails() {
+            const name = document.getElementById('name').value;
+            // Example implementation for party details
+            alert(`Fetching details for party: ${name}`);
+        }
+
+        function showLedger() {
+            // Open the party ledger in a new page
+            window.open('ledger.html', '_blank');
+        }
+
+        function calculateBalance() {
+            const receivedAmount = parseFloat(document.getElementById('receivedAmount').value) || 0;
+            const oldBalance = parseFloat(document.getElementById('oldBalance').value) || 0;
+            const balance = receivedAmount - oldBalance;
+            document.getElementById('balance').value = balance.toFixed(2); // Display balance with 2 decimal places
+        }
+
+        function saveAndPrint() {
+            const doc = new jsPDF();
+            
+            const receiptNo = document.getElementById('receiptNo').value;
+            const name = document.getElementById('name').value;
+            const oldBalance = document.getElementById('oldBalance').value;
+            const receivedAmount = document.getElementById('receivedAmount').value;
+            const balance = document.getElementById('balance').value;
+            const date = document.getElementById('date').value;
+            const transactionMode = document.getElementById('transactionMode').value;
+
+            // Create receipt content
+            doc.text(`Receipt No: ${receiptNo}`, 10, 10);
+            doc.text(`Date: ${date}`, 10, 20);
+            doc.text(`Receive with Thanks from Mr/Mrs ${name}`, 10, 30);
+            doc.text(`The sum of Rupees ${receivedAmount}`, 10, 40);
+            doc.text(`In words: ${numberToWords(receivedAmount)}`, 10, 50);
+            doc.text(`Old Balance: ${oldBalance}`, 10, 60);
+            doc.text(`Amount Received: ${receivedAmount}`, 10, 70);
+            doc.text(`New Balance: ${balance}`, 10, 80);
+            doc.text('For Soofi Travelogues', 10, 100);
+            doc.text('Authorized Signature', 10, 110);
+            doc.text('THANK YOU', 10, 120);
+
+            // Save the PDF with the receipt number as the filename
+            doc.save(`Receipt_${receiptNo}.pdf`);
+        }
+
+        function printReceipt() {
+            const receiptNo = document.getElementById('receiptNo').value;
+            const name = document.getElementById('name').value;
+            const oldBalance = document.getElementById('oldBalance').value;
+            const receivedAmount = document.getElementById('receivedAmount').value;
+            const balance = document.getElementById('balance').value;
+            const date = document.getElementById('date').value;
+            const transactionMode = document.getElementById('transactionMode').value;
+
+            let printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>Receipt</title>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(`<h2>Soofi Travelogues</h2>`);
+            printWindow.document.write(`<p>Place: Malappuram | Calicut | Thrissur | Kannur | Mangalore</p>`);
+            printWindow.document.write(`<p>Phone No: 7994 189 193 | 7559 894 744 | 70254 50050</p>`);
+            printWindow.document.write(`<p>Instagram: soofi_travelogues</p>`);
+            printWindow.document.write(`<p>Receipt No: ${receiptNo}</p>`);
+            printWindow.document.write(`<p>Date: ${date}</p>`);
+            printWindow.document.write(`<p>Receive with Thanks from Mr/Mrs ${name}</p>`);
+            printWindow.document.write(`<p>The sum of Rupees ${receivedAmount}</p>`);
+            printWindow.document.write(`<p>In words: ${numberToWords(receivedAmount)}</p>`);
+            printWindow.document.write(`<p>Old Balance: ${oldBalance}</p>`);
+            printWindow.document.write(`<p>Amount Received: ${receivedAmount}</p>`);
+            printWindow.document.write(`<p>New Balance: ${balance}</p>`);
+            printWindow.document.write(`<p>For Soofi Travelogues</p>`);
+            printWindow.document.write(`<p>Authorized Signature</p>`);
+            printWindow.document.write(`<p>THANK YOU</p>`);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+        }
+
+        function deleteReceipt() {
+            // Implementation to delete the receipt
+            alert("Delete functionality needs implementation");
+        }
+
+        function clearForm() {
+            document.getElementById('receiptForm').reset();
+            generateReceiptNumber();
+        }
+
+        function closeForm() {
+            window.close();
+        }
+
+        function numberToWords(amount) {
+            // Function to convert number to words (basic example)
+            // For full functionality, use a library or a more complete implementation
+            return amount; // Placeholder
+        }
+    </script>
+</body>
+</html>
