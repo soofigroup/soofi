@@ -18,7 +18,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
 
     if (username === "soofi travelogues" && password === "Soofi@2024") {
         // Redirect to a new page if login is successful
-        window.location.href = "LOGIN/register.html";
+        window.location.href = "soofi/LOGIN/register.html";
     } else {
         alert("Invalid username or password. Please try again.");
     }
