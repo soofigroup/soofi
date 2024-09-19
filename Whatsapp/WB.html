@@ -1,0 +1,192 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css">
+    <title>Enquiry Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+        id="bootstrap-css" />
+    <style>
+        .register .nav-tabs .nav-link:hover {
+            border: none;
+        }
+
+        h5 {
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url(bus.jpg) no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .wrapper {
+            width: 800px;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, .2);
+            backdrop-filter: blur(9px);
+            color: #fff;
+            border-radius: 12px;
+            padding: 30px 40px;
+        }
+
+        .wrapper h2 {
+            font-size: 40px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+        }
+
+        .text-align {
+            margin-top: -3%;
+            margin-bottom: -9%;
+            padding: 10%;
+            margin-left: 30%;
+        }
+
+        .form-new {
+            margin-right: 22%;
+            margin-left: 20%;
+        }
+
+        .register-heading {
+            margin-left: 21%;
+            margin-bottom: 10%;
+            color: #e9ecef;
+        }
+
+        .register-heading h1 {
+            margin-left: 21%;
+            margin-bottom: 10%;
+            color: #e9ecef;
+        }
+
+        .register {
+            background: -webkit-linear-gradient(left, #15385b, #127691);
+            margin-top: 3%;
+            padding: 3%;
+            border-radius: 2.5rem;
+        }
+
+        .btnSubmit {
+            width: 50%;
+            border-radius: 1rem;
+            padding: 1.5%;
+            color: #fff;
+            background-color: #107895;
+            border: none;
+            cursor: pointer;
+            margin-right: 6%;
+            color: rgb(246, 246, 252);
+            margin-top: 4%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tab-pane fade show active text-align form-new" id="home" role="tabpanel"
+                    aria-labelledby="home-tab">
+                    <h2 class="register-heading text-nowrap">Enquiry Form</h2>
+                    <div class="row register-form">
+                        <div class="col-md-12">
+                            <form autocomplete="off">
+                                <div class="form-group">
+                                    <h5>Name</h5>
+                                    <input type="text" name="Name" id="name" class="form-control"
+                                        placeholder="Your Name" value="" required="" />
+                                </div>
+                                <div class="form-group">
+                                    <h5>Pickup</h5>
+                                    <input type="text" name="Pickup" id="pickup" class="form-control"
+                                        placeholder="Enter Your Pickup Place" value="" required="" />
+                                </div>
+                                <div class="form-group">
+                                    <h5>Place of Travel</h5>
+                                    <input type="text" name="Place" id="place" class="form-control"
+                                        placeholder="Enter The Place of Travel" value="" required="" />
+                                </div>
+                                <div class="form-group">
+                                    <h5>Mobile Number</h5>
+                                    <input type="text" name="Phone" id="phone" class="form-control"
+                                        placeholder="Enter Your Mobile Number" value="" required="" />
+                                </div>
+                                <div class="form-group">
+                                    <h5>Date</h5>
+                                    <input type="date" name="Date" id="date" class="form-control"
+                                        placeholder="Enter Your Travel Date" value="" required="" />
+                                </div>
+                                <div class="form-group">
+                                    <h5>Seat Type</h5>
+                                    <select class="form-control" id="seatType">
+                                        <option value="49 Seat Bus">49 Seat Bus</option>
+                                        <option value="34 Seat Bus">34 Seat Bus</option>
+                                        <option value="29 Seat Bus">29 Seat Bus</option>
+                                        <option value="26 Seat Traveler">26 Seat Traveler</option>
+                                        <option value="19 Seat Bus">19 Seat Bus</option>
+                                        <option value="17 Seat Traveler">17 Seat Traveler</option>
+                                        <option value="12 Seat Traveler">12 Seat Traveler</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <h5>Air Conditioning</h5>
+                                    <label><input type="checkbox" id="ac" name="acType" value="A/C"> A/C</label>
+                                    <label><input type="checkbox" id="nonAc" name="acType" value="Non A/C"> Non A/C</label>
+                                </div>
+                                <div class="form-group">
+                                    <input type="button" name="submit" class="btnSubmit btn-block" onclick="gotowhatsapp()" value="Enquiry" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        function gotowhatsapp() {
+
+            var name = document.getElementById("name").value;
+            var phone = document.getElementById("phone").value;
+            var pickup = document.getElementById("pickup").value;
+            var place = document.getElementById("place").value;
+            var date = document.getElementById("date").value;
+            var seatType = document.getElementById("seatType").value;
+            
+            // Checkbox for A/C or Non A/C
+            var acType = [];
+            if (document.getElementById("ac").checked) {
+                acType.push("A/C");
+            }
+            if (document.getElementById("nonAc").checked) {
+                acType.push("Non A/C");
+            }
+            var acSelected = acType.join(", ");
+
+            var url = "https://wa.me/917025450050?text="
+                + "Name: " + name + "%0a"
+                + "Phone No: " + phone + "%0a"
+                + "Pickup: " + pickup + "%0a"
+                + "Place of Travel: " + place + "%0a"
+                + "Date of Journey: " + date + "%0a"
+                + "Seat Type: " + seatType + "%0a"
+                + "Air Conditioning: " + acSelected;
+
+            window.open(url, '_blank').focus();
+        }
+    </script>
+</body>
+
+</html>

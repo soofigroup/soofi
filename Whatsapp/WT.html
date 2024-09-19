@@ -1,0 +1,138 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css">
+    <title>Enquiry Form</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"
+        id="bootstrap-css" />
+    <style>
+        h5 {
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url(TRAIN.jpg) no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .wrapper {
+            width: 400px;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, .2);
+            backdrop-filter: blur(9px);
+            color: #fff;
+            border-radius: 12px;
+            padding: 30px 40px;
+        }
+
+        .wrapper h2 {
+            font-size: 40px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .btnSubmit {
+            width: 50%;
+            border-radius: 1rem;
+            padding: 1.5%;
+            background-color: #5f2311;
+            border: none;
+            cursor: pointer;
+            color: rgb(246, 246, 252);
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h2 class="register-heading">Enquiry Form</h2>
+        <form autocomplete="off">
+            <div class="form-group">
+                <h5>Name</h5>
+                <input type="text" id="name" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <h5>From</h5>
+                <input type="text" id="pickup" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <h5>To</h5>
+                <input type="text" id="place" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <h5>Mobile Number</h5>
+                <input type="text" id="phone" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <h5>Count of Members</h5>
+                <input type="number" id="count" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <h5>Departure Time</h5>
+                <input type="time" id="departureTime" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <h5>Date</h5>
+                <input type="date" id="date" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <h5>Class</h5>
+                <select id="service" class="form-control">
+                    <option>SL (Sleeper Class)</option>
+                    <option>1A (First Class AC)</option>
+                    <option>2A (Second Class AC)</option>
+                    <option>3A (Third Class AC)</option>
+                    <option>2S (Second Seater)</option>
+                    <option>CC (AC Chair Car)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="button" class="btnSubmit" value="Enquiry" onclick="gotowhatsapp()" />
+            </div>
+        </form>
+    </div>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        function gotowhatsapp() {
+            var name = document.getElementById("name").value;
+            var phone = document.getElementById("phone").value;
+            var count = document.getElementById("count").value;
+            var pickup = document.getElementById("pickup").value;
+            var place = document.getElementById("place").value;
+            var departureTime = document.getElementById("departureTime").value;
+            var date = document.getElementById("date").value;
+            var service = document.getElementById("service").value;
+
+            var url = "https://wa.me/917994189193?text="
+                + "Name: " + name + "%0a"
+                + "Phone No: " + phone + "%0a"
+                + "Count of Members: " + count + "%0a"
+                + "From: " + pickup + "%0a"
+                + "To: " + place + "%0a"
+                + "Departure Time: " + departureTime + "%0a"
+                + "Date of Journey: " + date + "%0a"
+                + "Class: " + service;
+
+            window.open(url, '_blank').focus();
+        }
+    </script>
+</body>
+
+</html>
